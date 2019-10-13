@@ -10,11 +10,18 @@ namespace Domain.ValueObjects
 
         public Price(double price)
         {
-            if (price < 0)
+            SetPrice(price);
+        }
+        public void SetPrice(double price)
+        {
+            if (price< 0)
             {
-                throw new LogicException("Price value should be greater or equal to zero");
+                Logger.Log("Price value should be greater or equal to zero");
             }
-            Value = price;
+            else
+            {
+                Value = price;
+            }
         }
     }
 }

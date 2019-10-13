@@ -15,9 +15,12 @@ namespace Domain.ValueObjects
         {
             if (quantity < 1)
             {
-                throw new LogicException("Quantity value should be greater or equal to zero");
+               Logger.Log("Quantity value should be greater or equal to zero");
             }
-            Value += quantity;
+            else
+            {
+                Value += quantity;
+            }
         }
     }
 }

@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Domain
 {
-    public class LogicException : Exception
+    public static class Logger
     {
-        public LogicException(string message) : base(message)
+        public static void Log(string message)
         {
             Console.WriteLine(message);
         }

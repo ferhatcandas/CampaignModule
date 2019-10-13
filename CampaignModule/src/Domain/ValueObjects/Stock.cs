@@ -11,19 +11,30 @@ namespace Domain.ValueObjects
         {
             if (stock < 0)
             {
-                throw new LogicException("Stock value should be greater or equal to zero");
+                Logger.Log("Stock value should be greater or equal to zero");
+            }
+            else
+            {
+            Value = stock;
             }
         }
         public void DecraseStock(int value)
         {
-            CheckStockExist(value);
-            Value = Value - value;
+            if (CheckStockExist(value))
+            {
+                Value -= value;
+            }
         }
-        public void CheckStockExist(int value)
+        private bool CheckStockExist(int value)
         {
             if (Value < value)
             {
-                throw new LogicException("There is no enough stock");
+                Logger.Log("There is no enough stock");
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

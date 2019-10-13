@@ -1,4 +1,5 @@
-﻿using Domain.Product;
+﻿using Domain.Campaign;
+using Domain.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Domain.Order
     public class OrderService : IOrderService
     {
         private List<OrderDto> OrderList { get; set; }
+
         private readonly IProductService productService;
         public OrderService(IProductService productService)
         {
@@ -19,23 +21,45 @@ namespace Domain.Order
         }
         public void AddOrder(string productCode, int quantity)
         {
-            var existOrder = GetOrder(productCode);
-            var product = productService.DecraseProductStock(productCode, quantity);
-            //campaign rules must add here
-            if (existOrder != null)
+            var product = productService.GetProduct(productCode);
+            if (product != null)
             {
-                existOrder.Quantity.Incrase(quantity);
-            }
-            else
-            {
-                OrderList.Add(new OrderDto(product, quantity));
+                if (product.HasStock(quantity))
+                {
+
+                    product.Stock.DecraseStock(quantity);
+
+                    var order = new OrderDto(product, quantity);
+
+                    if (product.HasCampaign())
+                    {
+                        var existCampaign = product.GetCampaign();
+                        if (existCampaign.HasDuration(productService.LocalTime))
+                        {
+                            existCampaign.IncraseTotalSalesCount(quantity);
+
+                            order.SetCampaign(existCampaign);
+
+                            order.SetSalesPrice(product.Price.Value);
+                        }  
+                       
+                    }
+                    else
+                    {
+                        order.SetSalesPrice(product.Price.Value);
+                    }
+
+                    OrderList.Add(order);
+                    Logger.Log($"Order created; product {productCode}, quantity {quantity}");
+                }
             }
         }
 
-        public OrderDto GetOrder(string productCode)
+        public List<OrderDto> GetOrdersByCampaignName(string campaignName)
         {
-
-            return OrderList.FirstOrDefault(x => x.Product.ProductCode.Value == productCode);
+            return OrderList.Where(x => x.Campaign?.Name?.Value == campaignName).ToList();
         }
+
+     
     }
 }

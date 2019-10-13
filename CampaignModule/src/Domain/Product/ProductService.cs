@@ -8,6 +8,8 @@ namespace Domain.Product
     public class ProductService : IProductService
     {
         private List<ProductDto> ProductList { get; set; }
+        public TimeSpan LocalTime { get; set; }
+
         public ProductService()
         {
             if (ProductList == null)
@@ -17,18 +19,15 @@ namespace Domain.Product
         {
             if (ProductList.Any(x => x.ProductCode.Value == productCode))
             {
-                throw new LogicException("This product already exists");
+                Logger.Log("This product already exists");
             }
-            ProductList.Add(new ProductDto(productCode, price, stock));
-        }
+            else
+            {
+                ProductList.Add(new ProductDto(productCode, price, stock));
+                Logger.Log($"Product created; code {productCode}, price {price}, stock {stock}");
+            }
 
-        public ProductDto DecraseProductStock(string productCode, int count)
-        {
-            var existProduct = GetProduct(productCode);
-            existProduct.Stock.DecraseStock(count);
-            return existProduct;
         }
-
         public ProductDto GetProduct(string productCode)
         {
             var product = ProductList.FirstOrDefault(x => x.ProductCode.Value == productCode);
@@ -38,7 +37,26 @@ namespace Domain.Product
             }
             else
             {
-                throw new LogicException("Product not exits");
+                Logger.Log("Product not exits");
+                return null;
+            }
+        }
+        private void MakeDiscount()
+        {
+            foreach (var item in ProductList)
+            {
+                item.MakeDiscount(-5);
+
+            }
+        }
+
+        public void IncraseTime(int totalIncrase)
+        {
+            LocalTime = LocalTime.Add(new TimeSpan(totalIncrase, 0, 0));
+            Logger.Log($"Time is {LocalTime.ToString("hh\\:mm")}");
+            for (int i = 0; i < totalIncrase; i++)
+            {
+                MakeDiscount();
             }
         }
     }

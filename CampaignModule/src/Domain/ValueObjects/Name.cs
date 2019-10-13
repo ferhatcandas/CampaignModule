@@ -11,7 +11,7 @@ namespace Domain.ValueObjects
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new LogicException("Name must not be empty");
+                Logger.Log("Name must not be empty");
             }
             Value = name;
         }

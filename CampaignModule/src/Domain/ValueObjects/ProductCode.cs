@@ -12,9 +12,12 @@ namespace Domain.ValueObjects
         {
             if (string.IsNullOrEmpty(code))
             {
-                throw new LogicException("Product code must not be empty.");
+               Logger.Log("Product code must not be empty.");
             }
-            Value = code;
+            else
+            {
+                Value = code;
+            }
         }
     }
 }

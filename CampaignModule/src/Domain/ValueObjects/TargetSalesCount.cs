@@ -11,9 +11,12 @@ namespace Domain.ValueObjects
         {
             if (count < 0)
             {
-                throw new LogicException("Target sales count value must be greather than zero");
+               Logger.Log("Target sales count value must be greather than zero");
             }
-            Value = count;
+            else
+            {
+                Value = count;
+            }
         }
     }
 }

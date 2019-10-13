@@ -15,7 +15,6 @@ namespace Application
         private readonly IProductService productService;
         private readonly ICampaignService campaignService;
         private readonly IOrderService orderService;
-
         public CommandManager(IProductService productService, ICampaignService campaignService, IOrderService orderService)
         {
             this.productService = productService;
@@ -25,7 +24,15 @@ namespace Application
         }
         public void Execute(string command, string[] arguments)
         {
-            CommandList[command].Invoke(arguments);
+
+            if (CommandList.ContainsKey(command))
+            {
+                CommandList[command].Invoke(arguments);
+            }
+            else
+            {
+                Logger.Log("Command is not found.");
+            }
         }
         public void Init()
         {
@@ -48,12 +55,18 @@ namespace Application
             int stock = GetParameter<int>(arguments, 2);
 
             productService.AddProduct(productCode, price, stock);
+
+
         }
         public void GetProductInfoCommand(string[] arguments)
         {
             string productCode = GetParameter<string>(arguments, 0);
 
-            productService.GetProduct(productCode);
+            var product = productService.GetProduct(productCode);
+
+            Logger.Log($"Product {product.ProductCode.Value} info; price {product.Price.Value}, stock {product.Stock.Value}");
+
+
         }
         public void CreateOrderCommand(string[] arguments)
         {
@@ -64,14 +77,26 @@ namespace Application
         }
         public void CreateCampaignCommand(string[] arguments)
         {
+            string campaignName = GetParameter<string>(arguments, 0);
+            string productCode = GetParameter<string>(arguments, 1);
+            int duration = GetParameter<int>(arguments, 2);
+            int priceManipulationLimit = GetParameter<int>(arguments, 3);
+            int targetSalesCount = GetParameter<int>(arguments, 4);
 
+            campaignService.AddCampaing(campaignName, productCode, duration, priceManipulationLimit, targetSalesCount);
         }
         public void GetCampaignInfoCommand(string[] arguments)
         {
+            string campaignName = GetParameter<string>(arguments, 0);
+
+            campaignService.GetCampaignInfo(campaignName);
 
         }
         public void IncraseTimeCommand(string[] arguments)
         {
+            int totalIncrase = GetParameter<int>(arguments, 0);
+    
+            productService.IncraseTime(totalIncrase);
 
         }
         private T GetParameter<T>(string[] values, int index)
@@ -82,7 +107,8 @@ namespace Application
             }
             catch (Exception ex)
             {
-                throw new LogicException("Unexcepted paramater value.");
+                Logger.Log("Unexcepted paramater value.");
+                return Activator.CreateInstance<T>();
             }
         }
     }

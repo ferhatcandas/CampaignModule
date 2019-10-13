@@ -13,9 +13,13 @@ namespace Domain.Order
         {
             Product = product;
             Quantity = new Quantity(quantity);
+            Id = new Guid();
         }
-        public CampaignDto Campaign { get; private set; }
         public Quantity Quantity { get; private set; }
+        public Price SalesPrice { get; set; }
         public ProductDto Product { get; private set; }
+        public CampaignDto Campaign { get; set; }
+        public void SetSalesPrice(double price) => SalesPrice = new Price(price);
+        public void SetCampaign(CampaignDto campaign) => Campaign = campaign;
     }
 }

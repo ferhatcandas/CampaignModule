@@ -6,23 +6,28 @@ namespace Domain.ValueObjects
 {
     public class Duration : ValueObjectBase
     {
-        public DateTime Value { get; private set; }
+        public int Value { get; private set; }
         public Duration(int hour)
         {
             if (hour < 0)
             {
-                throw new LogicException("Duration value is greather than zero");
+               Logger.Log("Duration value is greather than zero");
             }
-            Value = DateTime.Now.AddHours(hour);
+            else
+            {
+                Value = hour;
+            }
         }
         public void Incrase(int hour)
         {
-            //TODO
             if (hour < 0)
             {
-                throw new LogicException("Duration value is greather than zero");
+               Logger.Log("Duration value is greather than zero");
             }
-            Value = Value.AddHours(hour);
+            else
+            {
+                Value += hour;
+            }
         }
     }
 }

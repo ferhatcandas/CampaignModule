@@ -6,9 +6,9 @@ namespace Domain.Product
 {
     public interface IProductService
     {
+        TimeSpan LocalTime { get; set; }
         void AddProduct(string productCode, double price, int stock);
         ProductDto GetProduct(string productCode);
-        ProductDto DecraseProductStock(string productCode,int count);
-
+        void IncraseTime(int totalIncrase);
     }
 }
