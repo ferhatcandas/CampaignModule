@@ -19,5 +19,10 @@ namespace Domain.ValueObjects
                 Value = code;
             }
         }
+
+        public override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }

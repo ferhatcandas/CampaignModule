@@ -15,11 +15,14 @@ namespace Application
         private readonly IProductService productService;
         private readonly ICampaignService campaignService;
         private readonly IOrderService orderService;
+        private TimeSpan systemTime;
+
         public CommandManager(IProductService productService, ICampaignService campaignService, IOrderService orderService)
         {
             this.productService = productService;
             this.campaignService = campaignService;
             this.orderService = orderService;
+            systemTime = new TimeSpan(0, 0, 0);
             Init();
         }
         public void Execute(string command, string[] arguments)
@@ -46,8 +49,12 @@ namespace Application
                 CommandList.Add("create_campaign", CreateCampaignCommand);
                 CommandList.Add("get_campaign_info", GetCampaignInfoCommand);
                 CommandList.Add("increase_time", IncraseTimeCommand);
+                CommandList.Add("clear", ClearCommands);
             }
         }
+
+        private void ClearCommands(string[] obj) => Console.Clear();
+
         public void CreateProductCommand(string[] arguments)
         {
             string productCode = GetParameter<string>(arguments, 0);
@@ -72,8 +79,8 @@ namespace Application
         {
             string productCode = GetParameter<string>(arguments, 0);
             int quantity = GetParameter<int>(arguments, 1);
-
-            orderService.AddOrder(productCode, quantity);
+            var product = productService.GetProduct(productCode);
+            orderService.AddOrder(product, quantity, systemTime);
         }
         public void CreateCampaignCommand(string[] arguments)
         {
@@ -95,9 +102,12 @@ namespace Application
         public void IncraseTimeCommand(string[] arguments)
         {
             int totalIncrase = GetParameter<int>(arguments, 0);
-    
-            productService.IncraseTime(totalIncrase);
 
+            systemTime = systemTime.Add(new TimeSpan(totalIncrase, 0, 0));
+
+            Logger.Log($"Time is {systemTime.ToString("hh\\:mm")}");
+
+            productService.IncraseTime(totalIncrase);
         }
         private T GetParameter<T>(string[] values, int index)
         {
@@ -110,6 +120,11 @@ namespace Application
                 Logger.Log("Unexcepted paramater value.");
                 return Activator.CreateInstance<T>();
             }
+        }
+
+        public TimeSpan GetTime()
+        {
+            return systemTime;
         }
     }
 }

@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="LogicException.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Product\" />
     <Folder Include="Order\" />
   </ItemGroup>

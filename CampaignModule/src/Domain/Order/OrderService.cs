@@ -9,19 +9,17 @@ namespace Domain.Order
 {
     public class OrderService : IOrderService
     {
+
         private List<OrderDto> OrderList { get; set; }
 
-        private readonly IProductService productService;
-        public OrderService(IProductService productService)
+        public OrderService()
         {
             if (OrderList == null)
                 OrderList = new List<OrderDto>();
-
-            this.productService = productService;
         }
-        public void AddOrder(string productCode, int quantity)
+        public void AddOrder(ProductDto product, int quantity, TimeSpan systemTime)
         {
-            var product = productService.GetProduct(productCode);
+            //var product = productService.GetProduct(productCode);
             if (product != null)
             {
                 if (product.HasStock(quantity))
@@ -35,15 +33,16 @@ namespace Domain.Order
                     {
                         var existCampaign = product.GetCampaign();
 
-                        if (existCampaign.HasDuration(productService.LocalTime) && !existCampaign.HasTargetSalesCountExceed(quantity))
+                        if (existCampaign.HasDuration(systemTime) && !existCampaign.HasTargetSalesCountExceed(quantity))
                         {
                             existCampaign.IncraseTotalSalesCount(quantity);
 
                             order.SetCampaign(existCampaign);
 
                             order.SetSalesPrice(product.Price.Value);
+
                             OrderList.Add(order);
-                            Logger.Log($"Order created; product {productCode}, quantity {quantity}");
+                            Logger.Log($"Order created; product {product.ProductCode.Value}, quantity {quantity}");
 
                         }
                     }
@@ -51,7 +50,7 @@ namespace Domain.Order
                     {
                         order.SetSalesPrice(product.Price.Value);
                         OrderList.Add(order);
-                        Logger.Log($"Order created; product {productCode}, quantity {quantity}");
+                        Logger.Log($"Order created; product {product.ProductCode.Value}, quantity {quantity}");
                     }
 
                 }
@@ -63,6 +62,9 @@ namespace Domain.Order
             return OrderList.Where(x => x.Campaign?.Name?.Value == campaignName).ToList();
         }
 
-
+        public List<OrderDto> GetOrders()
+        {
+            return OrderList;
+        }
     }
 }

@@ -9,14 +9,7 @@ namespace Domain.ValueObjects
         public int Value { get; private set; }
         public Duration(int hour)
         {
-            if (hour < 0)
-            {
-               Logger.Log("Duration value is greather than zero");
-            }
-            else
-            {
-                Value = hour;
-            }
+            Incrase(hour);
         }
         public void Incrase(int hour)
         {
@@ -28,6 +21,10 @@ namespace Domain.ValueObjects
             {
                 Value += hour;
             }
+        }
+        public override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
         }
     }
 }

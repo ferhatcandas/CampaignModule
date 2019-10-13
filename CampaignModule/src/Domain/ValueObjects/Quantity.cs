@@ -22,5 +22,10 @@ namespace Domain.ValueObjects
                 Value += quantity;
             }
         }
+
+        public override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }

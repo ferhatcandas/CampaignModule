@@ -7,5 +7,6 @@ namespace Application
     public interface ICommand
     {
         void Execute(string command, string[] arguments);
+        TimeSpan GetTime();
     }
 }

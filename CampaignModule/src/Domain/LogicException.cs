@@ -8,7 +8,6 @@ namespace Domain
     {
         public LogicException(string message) : base(message)
         {
-            Console.WriteLine(message);
         }
     }
 }

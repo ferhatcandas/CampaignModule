@@ -8,7 +8,6 @@ namespace Domain.Product
     public class ProductService : IProductService
     {
         private List<ProductDto> ProductList { get; set; }
-        public TimeSpan LocalTime { get; set; }
 
         public ProductService()
         {
@@ -45,15 +44,14 @@ namespace Domain.Product
         {
             foreach (var item in ProductList)
             {
-                item.MakeDiscount(-5);
-
+                //not linear
+                item.MakeDiscount(RandomizeDiscountValue());
             }
         }
+        private int RandomizeDiscountValue() => new Random().Next(-15, 15);
 
         public void IncraseTime(int totalIncrase)
         {
-            LocalTime = LocalTime.Add(new TimeSpan(totalIncrase, 0, 0));
-            Logger.Log($"Time is {LocalTime.ToString("hh\\:mm")}");
             for (int i = 0; i < totalIncrase; i++)
             {
                 MakeDiscount();

@@ -23,5 +23,10 @@ namespace Domain.ValueObjects
                 Value = price;
             }
         }
+
+        public override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }

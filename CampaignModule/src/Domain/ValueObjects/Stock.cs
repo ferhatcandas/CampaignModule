@@ -37,5 +37,10 @@ namespace Domain.ValueObjects
                 return true;
             }
         }
+
+        public override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
     }
 }
