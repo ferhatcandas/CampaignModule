@@ -24,9 +24,10 @@ namespace Domain.Campaign
         public PriceManipulationLimit Limit { get; private set; }
         public TargetSalesCount Count { get; private set; }
         public bool Status { get; private set; }
-        private int TotalSalesCount { get; set; }
+        public int TotalSalesCount { get; private set; }
         public void IncraseTotalSalesCount(int quantity) => TotalSalesCount += quantity;
         public void CampaignClose() => Status = false;
+        public bool HasTargetSalesCountExceed(int quantity) => TotalSalesCount + quantity > Count.Value;
         public bool IsPriceManipulationLimitExceed()
         {
             var maximumManipulationValue = Product.RealPrice.Value * (100 - Limit.Value) / 100;
@@ -34,14 +35,8 @@ namespace Domain.Campaign
             return Product.Price.Value < maximumManipulationValue;
         }
 
-        internal bool HasDuration(TimeSpan localTime)
-        {
-            return localTime.Hours < Duration.Value;
-        }
+        public bool HasDuration(TimeSpan localTime) => localTime.Hours < Duration.Value;
 
-        public string GetStatusString()
-        {
-            return Status ? "Active" : "Passive";
-        }
+        public string GetStatusString() => Status ? "Active" : "Passive";
     }
 }

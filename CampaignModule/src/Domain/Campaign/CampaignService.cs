@@ -28,20 +28,16 @@ namespace Domain.Campaign
             if (GetCampaignByName(campaignName) == null)
             {
                 var product = productService.GetProduct(productCode);
-                if (product != null)
+                if (product != null && !product.HasCampaign() && product.HasStock(targetSalesCount))
                 {
-                    if (!product.HasCampaign())
-                    {
-                        var campaign = new CampaignDto(campaignName, product, duration, priceManipulationLimit, targetSalesCount);
-                        product.SetCampaign(campaign);
-                        CampaignList.Add(campaign);
-                        Logger.Log($"Campaign created; name {campaign.Name.Value}, product {product.ProductCode.Value}, duration {campaign.Duration.Value}, limit {campaign.Limit.Value}, target sales count {campaign.Count.Value}");
-                    }
-                    else
-                    {
-                        Logger.Log("This product already have a campaign.");
-                    }
-                   
+
+                    var campaign = new CampaignDto(campaignName, product, duration, priceManipulationLimit, targetSalesCount);
+                    product.SetCampaign(campaign);
+                    CampaignList.Add(campaign);
+                    Logger.Log($"Campaign created; name {campaign.Name.Value}, product {product.ProductCode.Value}, duration {campaign.Duration.Value}, limit {campaign.Limit.Value}, target sales count {campaign.Count.Value}");
+
+
+
                 }
             }
         }

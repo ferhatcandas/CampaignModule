@@ -27,7 +27,7 @@ namespace Domain.Product
             bool exist = Stock.Value - quantity >= 0;
             if (!exist)
             {
-                Logger.Log($"Product stock is finished.");
+                Logger.Log($"Product stock is not enought for this quantity, current stock is {Stock.Value}");
             }
 
             return exist;
@@ -50,7 +50,11 @@ namespace Domain.Product
 
         }
 
-        internal bool HasCampaign() => Campaign != null;
+        internal bool HasCampaign()
+        {
+            return Campaign != null;
+        }
+
         internal CampaignDto GetCampaign() => Campaign;
     }
 }

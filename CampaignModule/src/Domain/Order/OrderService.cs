@@ -34,23 +34,26 @@ namespace Domain.Order
                     if (product.HasCampaign())
                     {
                         var existCampaign = product.GetCampaign();
-                        if (existCampaign.HasDuration(productService.LocalTime))
+
+                        if (existCampaign.HasDuration(productService.LocalTime) && !existCampaign.HasTargetSalesCountExceed(quantity))
                         {
                             existCampaign.IncraseTotalSalesCount(quantity);
 
                             order.SetCampaign(existCampaign);
 
                             order.SetSalesPrice(product.Price.Value);
-                        }  
-                       
+                            OrderList.Add(order);
+                            Logger.Log($"Order created; product {productCode}, quantity {quantity}");
+
+                        }
                     }
                     else
                     {
                         order.SetSalesPrice(product.Price.Value);
+                        OrderList.Add(order);
+                        Logger.Log($"Order created; product {productCode}, quantity {quantity}");
                     }
 
-                    OrderList.Add(order);
-                    Logger.Log($"Order created; product {productCode}, quantity {quantity}");
                 }
             }
         }
@@ -60,6 +63,6 @@ namespace Domain.Order
             return OrderList.Where(x => x.Campaign?.Name?.Value == campaignName).ToList();
         }
 
-     
+
     }
 }
