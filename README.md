@@ -82,3 +82,12 @@ create_campaign C1 P1 5 20 100 Campaign created; name C1, product P1, duration 1
  get_product_info P1 Product P1 info; price 100, stock 1000 
 
  get_campaign_info C1 Campaign C1 info; Status Ended, Target Sales 100, Total Sales 0, Turnover 0, Average Item Price – 
+
+## Coverage On Project
+
+- .Net Core(C#) Console Application
+- xUnit unit testing
+- Command Pattern
+- DependencyInjection
+- Object Oriented Programming
+- Domain Modeling
