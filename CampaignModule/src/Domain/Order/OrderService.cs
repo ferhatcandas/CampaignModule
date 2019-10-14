@@ -57,14 +57,17 @@ namespace Domain.Order
             }
         }
 
-        public List<OrderDto> GetOrdersByCampaignName(string campaignName)
-        {
-            return OrderList.Where(x => x.Campaign?.Name?.Value == campaignName).ToList();
-        }
+        public List<OrderDto> GetOrdersByCampaignName(string campaignName) => OrderList.Where(x => x.Campaign?.Name?.Value == campaignName).ToList();
 
-        public List<OrderDto> GetOrders()
+        public List<OrderDto> GetOrders() => OrderList;
+
+        public int GetTotalSalesByCampaign(string campaignName) => GetOrdersByCampaignName(campaignName)?.Sum(x => x.Quantity.Value) ?? 0;
+
+        public double GetAvarageItemPriceByCampaign(string campaignName)
         {
-            return OrderList;
+            int totalSales = GetTotalSalesByCampaign(campaignName);
+            double salesPrice = GetOrdersByCampaignName(campaignName)?.Sum(x => x.SalesPrice.Value) ?? 0;
+            return salesPrice / totalSales;
         }
     }
 }

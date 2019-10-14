@@ -12,24 +12,20 @@ namespace Domain.Campaign
     {
         private List<CampaignDto> CampaignList { get; set; }
 
-
-        private readonly IProductService productService;
+        //orderService use for only get orderList(it could be DAL)
         private readonly IOrderService orderService;
-        public CampaignService(IProductService productService, IOrderService orderService)
+        public CampaignService(IOrderService orderService)
         {
             if (CampaignList == null)
                 CampaignList = new List<CampaignDto>();
-            this.productService = productService;
             this.orderService = orderService;
         }
 
-        public void AddCampaing(string campaignName, string productCode, int duration, int priceManipulationLimit, int targetSalesCount)
+        public void AddCampaing(string campaignName, ProductDto product, int duration, int priceManipulationLimit, int targetSalesCount)
         {
             if (GetCampaignByName(campaignName) == null)
             {
-                var product = productService.GetProduct(productCode);
-
-                if (product != null && !product.HasCampaign() && product.HasStock(targetSalesCount))
+                if (!product.HasCampaign() && product.HasStock(targetSalesCount))
                 {
 
                     var campaign = new CampaignDto(campaignName, product, duration, priceManipulationLimit, targetSalesCount);
@@ -53,18 +49,10 @@ namespace Domain.Campaign
 
             if (campaign != null)
             {
-                var orders = orderService.GetOrdersByCampaignName(campaign.Name.Value);
+                int totalSales = orderService.GetTotalSalesByCampaign(campaign.Name.Value);
+                double avarageItemPrice = orderService.GetAvarageItemPriceByCampaign(campaign.Name.Value);
 
-                int totalSales = 0;
-                double avarageItemPrice = 0D;
-
-                if (orders?.Count > 0)
-                {
-                    totalSales = orders.Sum(x => x.Quantity.Value);
-
-                    avarageItemPrice = orders.Sum(y => y.SalesPrice.Value) / totalSales;
-                }
-
+                //i dont know turnover what is it
                 Logger.Log($"Campaign {campaign.Name.Value} info; Status {campaign.GetStatusString()}, Target Sales {campaign.Count.Value}, Total Sales {totalSales}, Turnover {totalSales * avarageItemPrice}, Average Item Price {avarageItemPrice}");
                 return campaign;
             }
@@ -75,6 +63,7 @@ namespace Domain.Campaign
                 return null;
             }
         }
+
         private CampaignDto GetCampaign(Func<CampaignDto, bool> predicate) => CampaignList.FirstOrDefault(predicate);
 
         public CampaignDto GetCampaignByProductCode(string productCode) => GetCampaign(x => x.Product.ProductCode.Value == productCode);

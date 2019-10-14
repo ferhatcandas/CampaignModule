@@ -119,7 +119,7 @@ namespace Application.Tests
 
             var currentTime = command.GetTime();
 
-            currentTime.Should().Be(new TimeSpan(0, 0, 0)); 
+            currentTime.Should().Be(new TimeSpan(0, 0, 0));
             //logs on console
             command.Execute("increase_time", new string[] { "1" });
 
@@ -132,7 +132,7 @@ namespace Application.Tests
         {
             productService = new ProductService();
             orderService = new OrderService();
-            campaignService = new CampaignService(productService, orderService);
+            campaignService = new CampaignService(orderService);
             return new CommandManager(productService, campaignService, orderService);
         }
     }

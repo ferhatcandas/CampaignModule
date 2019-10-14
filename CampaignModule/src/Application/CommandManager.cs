@@ -80,6 +80,7 @@ namespace Application
             string productCode = GetParameter<string>(arguments, 0);
             int quantity = GetParameter<int>(arguments, 1);
             var product = productService.GetProduct(productCode);
+
             orderService.AddOrder(product, quantity, systemTime);
         }
         public void CreateCampaignCommand(string[] arguments)
@@ -90,7 +91,9 @@ namespace Application
             int priceManipulationLimit = GetParameter<int>(arguments, 3);
             int targetSalesCount = GetParameter<int>(arguments, 4);
 
-            campaignService.AddCampaing(campaignName, productCode, duration, priceManipulationLimit, targetSalesCount);
+            var product = productService.GetProduct(productCode);
+
+            campaignService.AddCampaing(campaignName, product, duration, priceManipulationLimit, targetSalesCount);
         }
         public void GetCampaignInfoCommand(string[] arguments)
         {

@@ -18,13 +18,15 @@ namespace Domain.Tests.Campaign
         {
             productService = new ProductService();
             Init();
-            this.campaignService = new CampaignService(productService, new OrderService());
+            this.campaignService = new CampaignService(new OrderService());
         }
 
         [Fact]
         public void CampaignService_Should_AddNewCampaign()
         {
-            campaignService.AddCampaing("c1", "p1", 10, 20, 100);
+            var product = productService.GetProduct("p1");
+
+            campaignService.AddCampaing("c1", product, 10, 20, 100);
 
             var campaign = campaignService.GetCampaignInfo("c1");
 
@@ -41,17 +43,21 @@ namespace Domain.Tests.Campaign
         [Fact]
         public void CampaignService_Should_ThrowLogicException_CampaignAlreadyExists()
         {
-            campaignService.AddCampaing("c1", "p1", 10, 20, 100);
+            var product = productService.GetProduct("p1");
+
+            campaignService.AddCampaing("c1", product, 10, 20, 100);
 
             Assert.Throws<LogicException>(() =>
             {
-                campaignService.AddCampaing("c1", "p1", 10, 20, 100);
+                campaignService.AddCampaing("c1", product, 10, 20, 100);
             });
         }
         [Fact]
         public void CampaignService_Should_GetCampaignByProductCode_IsSuccess()
         {
-            campaignService.AddCampaing("c1", "p1", 10, 20, 100);
+            var product = productService.GetProduct("p1");
+
+            campaignService.AddCampaing("c1", product, 10, 20, 100);
 
             var campaign = campaignService.GetCampaignByProductCode("p1");
 

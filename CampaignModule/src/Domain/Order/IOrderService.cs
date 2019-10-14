@@ -12,5 +12,7 @@ namespace Domain.Order
         List<OrderDto> GetOrdersByCampaignName(string campaignName);
 
         List<OrderDto> GetOrders();
+        int GetTotalSalesByCampaign(string value);
+        double GetAvarageItemPriceByCampaign(string value);
     }
 }
