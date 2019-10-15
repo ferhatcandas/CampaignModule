@@ -19,13 +19,6 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
-        public void ShouldBeThrowArgumentException()
-        {
-
-            Assert.Throws<ArgumentException>(() => { new Duration(-1); });
-
-        }
-        [Fact]
         public void Duration_ShouldReturn_Value_For_EqualityComponent()
         {
             var duration = new Duration(5);

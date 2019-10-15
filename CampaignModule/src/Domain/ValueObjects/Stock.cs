@@ -11,11 +11,11 @@ namespace Domain.ValueObjects
         {
             if (stock < 0)
             {
-                throw new ArgumentException("Stock value should be greater or equal to zero");
+                Logger.Log("Stock value should be greater or equal to zero");
             }
             else
             {
-                Value = stock;
+            Value = stock;
             }
         }
         public void DecraseStock(int value)

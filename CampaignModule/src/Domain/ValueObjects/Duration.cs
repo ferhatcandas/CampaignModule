@@ -15,7 +15,7 @@ namespace Domain.ValueObjects
         {
             if (hour < 0)
             {
-                throw new ArgumentException("Duration value is greather than zero");
+               Logger.Log("Duration value is greather than zero");
             }
             else
             {

@@ -19,13 +19,6 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
-        public void ShouldBeThrowArgumentException()
-        {
-
-            Assert.Throws<ArgumentException>(() => { new Stock(-1); });
-
-        }
-        [Fact]
         public void Stock_ShouldReturn_Value_For_EqualityComponent()
         {
             var Stock = new Stock(5);

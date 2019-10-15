@@ -19,13 +19,6 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
-        public void ShouldBeThrowArgumentException()
-        {
-
-            Assert.Throws<ArgumentException>(() => { new ProductCode(""); });
-
-        }
-        [Fact]
         public void ProductCode_ShouldReturn_Value_For_EqualityComponent()
         {
             var ProductCode = new ProductCode("p1");
