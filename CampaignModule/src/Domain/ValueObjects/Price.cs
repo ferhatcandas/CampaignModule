@@ -14,9 +14,9 @@ namespace Domain.ValueObjects
         }
         public void SetPrice(double price)
         {
-            if (price< 0)
+            if (price < 0)
             {
-                Logger.Log("Price value should be greater or equal to zero");
+                throw new ArgumentException("Price value should be greater or equal to zero");
             }
             else
             {

@@ -19,6 +19,13 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
+        public void ShouldBeThrowArgumentException()
+        {
+
+            Assert.Throws<ArgumentException>(() => { new TargetSalesCount(-1); });
+
+        }
+        [Fact]
         public void TargetSalesCount_ShouldReturn_Value_For_EqualityComponent()
         {
             var TargetSalesCount = new TargetSalesCount(5);

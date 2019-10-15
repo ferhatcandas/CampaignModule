@@ -6,14 +6,17 @@ namespace Domain.ValueObjects
 {
     public class Name : ValueObjectBase
     {
-        public string Value { get;private set; }
+        public string Value { get; private set; }
         public Name(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
-                Logger.Log("Name must not be empty");
+                throw new ArgumentException("Name must not be empty");
             }
-            Value = name;
+            else
+            {
+                Value = name;
+            }
         }
         public override IEnumerable<object> GetEqualityComponents()
         {

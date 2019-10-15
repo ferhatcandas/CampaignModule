@@ -11,7 +11,7 @@ namespace Domain.ValueObjects
         {
             if (limit < 0)
             {
-               Logger.Log("Price manipulation limit must be greather than zero");
+              throw new ArgumentException("Price manipulation limit must be greather than zero");
             }
             else
             {

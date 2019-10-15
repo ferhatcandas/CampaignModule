@@ -19,6 +19,13 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
+        public void ShouldBeThrowArgumentException()
+        {
+
+            Assert.Throws<ArgumentException>(() => { new Name(""); });
+
+        }
+        [Fact]
         public void Name_ShouldReturn_Value_For_EqualityComponent()
         {
             var Name = new Name("c2");

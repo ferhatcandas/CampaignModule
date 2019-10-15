@@ -19,6 +19,13 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
+        public void ShouldBeThrowArgumentException()
+        {
+
+            Assert.Throws<ArgumentException>(() => { new Price(-1); });
+
+        }
+        [Fact]
         public void Price_ShouldReturn_Value_For_EqualityComponent()
         {
             var Price = new Price(5);

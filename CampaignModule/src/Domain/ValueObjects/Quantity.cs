@@ -15,7 +15,7 @@ namespace Domain.ValueObjects
         {
             if (quantity < 1)
             {
-               Logger.Log("Quantity value should be greater or equal to zero");
+              throw new ArgumentException("Quantity value should be greater or equal to zero");
             }
             else
             {

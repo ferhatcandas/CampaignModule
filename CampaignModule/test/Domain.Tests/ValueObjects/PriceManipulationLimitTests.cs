@@ -19,6 +19,13 @@ namespace Domain.Tests.ValueObjects
 
         }
         [Fact]
+        public void ShouldBeThrowArgumentException()
+        {
+
+            Assert.Throws<ArgumentException>(() => { new PriceManipulationLimit(-1); });
+
+        }
+        [Fact]
         public void PriceManipulationLimit_ShouldReturn_Value_For_EqualityComponent()
         {
             var PriceManipulationLimit = new PriceManipulationLimit(5);

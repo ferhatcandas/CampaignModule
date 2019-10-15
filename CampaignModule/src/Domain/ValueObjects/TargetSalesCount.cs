@@ -11,7 +11,7 @@ namespace Domain.ValueObjects
         {
             if (count < 0)
             {
-               Logger.Log("Target sales count value must be greather than zero");
+               throw new ArgumentException("Target sales count value must be greather than zero");
             }
             else
             {
