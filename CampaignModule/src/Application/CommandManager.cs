@@ -44,6 +44,7 @@ namespace Application
                 CommandList = new Dictionary<string, Action<string[]>>();
 
                 CommandList.Add("create_product", CreateProductCommand);
+                CommandList.Add("change_product_price", ChangeProductPrice);
                 CommandList.Add("get_product_info", GetProductInfoCommand);
                 CommandList.Add("create_order", CreateOrderCommand);
                 CommandList.Add("create_campaign", CreateCampaignCommand);
@@ -51,6 +52,13 @@ namespace Application
                 CommandList.Add("increase_time", IncraseTimeCommand);
                 CommandList.Add("clear", ClearCommands);
             }
+        }
+
+        private void ChangeProductPrice(string[] arguments)
+        {
+            string productCode = GetParameter<string>(arguments, 0);
+            double price = GetParameter<double>(arguments, 1);
+            productService.ChangeProductPrice(productCode, price);
         }
 
         private void ClearCommands(string[] obj) => Console.Clear();

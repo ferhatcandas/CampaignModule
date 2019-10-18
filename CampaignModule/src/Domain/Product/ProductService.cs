@@ -57,5 +57,15 @@ namespace Domain.Product
                 MakeDiscount();
             }
         }
+
+        public void ChangeProductPrice(string productCode,double price)
+        {
+            var product = this.ProductList.FirstOrDefault(x => x.ProductCode.Value == productCode);
+            if (product != null)
+            {
+                product.RealPrice.SetPrice(price);
+                product.Price.SetPrice(price);
+            }
+        }
     }
 }
