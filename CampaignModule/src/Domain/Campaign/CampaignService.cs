@@ -25,7 +25,7 @@ namespace Domain.Campaign
         {
             if (GetCampaignByName(campaignName) == null)
             {
-                if (!product.HasCampaign() && product.HasStock(targetSalesCount))
+                if (!product.HasCampaign() && product.Stock.HasStock(targetSalesCount))
                 {
 
                     var campaign = new CampaignDto(campaignName, product, duration, priceManipulationLimit, targetSalesCount);

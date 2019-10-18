@@ -22,38 +22,23 @@ namespace Domain.Product
         public Stock Stock { get; private set; }
         private CampaignDto Campaign { get; set; }
         public void SetCampaign(CampaignDto campaign) => Campaign = campaign;
-        public bool HasStock(int quantity)
-        {
-            bool exist = Stock.Value - quantity >= 0;
-            if (!exist)
-            {
-                Logger.Log($"Product stock is not enought for this quantity, current stock is {Stock.Value}");
-            }
 
-            return exist;
-        }
         private void SetPrice(double price) => Price = new Price(price);
         public void MakeDiscount(double price)
         {
             if (HasCampaign())
             {
-                if (Campaign.Status)
+                Price.SetPrice(Price.Value + price);
+                if (Campaign.IsPriceManipulationLimitExceed())
                 {
-                    Price.SetPrice(Price.Value + price);
-                    if (Campaign.IsPriceManipulationLimitExceed())
-                    {
-                        Price.SetPrice(RealPrice.Value);
-                        Campaign.CampaignClose();
-                    }
+                    Price.SetPrice(RealPrice.Value);
+                    Campaign.CampaignClose();
                 }
             }
 
         }
 
-        internal bool HasCampaign()
-        {
-            return Campaign != null;
-        }
+        internal bool HasCampaign() => Campaign != null && Campaign.Status;
 
         internal CampaignDto GetCampaign() => Campaign;
     }

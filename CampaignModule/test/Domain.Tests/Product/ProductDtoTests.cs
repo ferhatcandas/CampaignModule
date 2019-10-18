@@ -15,9 +15,9 @@ namespace Domain.Tests.Product
         {
             var product = GetMockData();
 
-            product.HasStock(0).Should().BeTrue();
+            product.Stock.HasStock(0).Should().BeTrue();
 
-            product.HasStock(1001).Should().BeFalse();
+            product.Stock.HasStock(1001).Should().BeFalse();
         }
         [Fact]
         public void Product_Should_MakeDiscount_IsSuccess()

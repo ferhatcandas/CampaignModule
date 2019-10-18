@@ -19,41 +19,36 @@ namespace Domain.Order
         }
         public void AddOrder(ProductDto product, int quantity, TimeSpan systemTime)
         {
-            //var product = productService.GetProduct(productCode);
-            if (product != null)
+            if (product.Stock.HasStock(quantity))
             {
-                if (product.HasStock(quantity))
+                product.Stock.DecraseStock(quantity);
+
+                var order = new OrderDto(product, quantity);
+
+                if (product.HasCampaign())
                 {
+                    var existCampaign = product.GetCampaign();
 
-                    product.Stock.DecraseStock(quantity);
-
-                    var order = new OrderDto(product, quantity);
-
-                    if (product.HasCampaign())
+                    if (existCampaign.HasDuration(systemTime) && !existCampaign.HasTargetSalesCountExceed(quantity))
                     {
-                        var existCampaign = product.GetCampaign();
+                        existCampaign.IncraseTotalSalesCount(quantity);
 
-                        if (existCampaign.HasDuration(systemTime) && !existCampaign.HasTargetSalesCountExceed(quantity))
-                        {
-                            existCampaign.IncraseTotalSalesCount(quantity);
+                        order.SetCampaign(existCampaign);
 
-                            order.SetCampaign(existCampaign);
-
-                            order.SetSalesPrice(product.Price.Value);
-
-                            OrderList.Add(order);
-                            Logger.Log($"Order created; product {product.ProductCode.Value}, quantity {quantity}");
-
-                        }
-                    }
-                    else
-                    {
                         order.SetSalesPrice(product.Price.Value);
+
                         OrderList.Add(order);
                         Logger.Log($"Order created; product {product.ProductCode.Value}, quantity {quantity}");
-                    }
 
+                    }
                 }
+                else
+                {
+                    order.SetSalesPrice(product.Price.Value);
+                    OrderList.Add(order);
+                    Logger.Log($"Order created; product {product.ProductCode.Value}, quantity {quantity}");
+                }
+
             }
         }
 

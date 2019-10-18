@@ -15,7 +15,7 @@ namespace Domain.ValueObjects
             }
             else
             {
-            Value = stock;
+                Value = stock;
             }
         }
         public void DecraseStock(int value)
@@ -37,7 +37,16 @@ namespace Domain.ValueObjects
                 return true;
             }
         }
+        public bool HasStock(int quantity)
+        {
+            bool exist = Value - quantity >= 0;
+            if (!exist)
+            {
+                Logger.Log($"Product stock is not enought for this quantity, current stock is {Value}");
+            }
 
+            return exist;
+        }
         public override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
